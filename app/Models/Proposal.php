@@ -1,40 +1,19 @@
 <?php
 
-namespace App\Livewire\Projects;
+namespace App\Models;
 
-use App\Models\Project;
-use Livewire\Attributes\Computed;
-use Livewire\Attributes\On;
-use Livewire\Component;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
-class Proposals extends Component
+class Proposal extends Model
 {
-    public Project $project;
+    /** @use HasFactory<\Database\Factories\ProposalFactory> */
+    use HasFactory, Notifiable;
 
-    public int $qty = 5;
-    #[Computed()]
-    public function proposals()
-    {
-        return $this->project->proposals()
-            ->orderBy('hours')
-            ->paginate($this->qty);
-    }
-    #[Computed()]
-    public function lastProposalTime()
-    {
-        return $this->project->proposals()
-            ->latest()->first()
-            ->created_at->diffForHumans();
-    }
-    public function loadMore()
-    {
-        $this->qty += 5;
-    }
-    #[On('proposal::created')]
-
-
-    public function render()
-    {
-        return view('livewire.projects.proposals');
-    }
+    protected $fillable = [
+        'email',
+        'hours',
+        'position_status',
+    ];
 }
